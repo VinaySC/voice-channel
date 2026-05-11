@@ -1,0 +1,319 @@
+.wizard-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.wizard-content {
+  width: 100%;
+  max-width: 916px;
+  /* Removed margin: 0 auto to avoid center alignment */
+}
+
+.wizard-header {
+  height: 60px;
+  border-bottom: 1px solid var(--slate-border-light, #e2e8f0);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.wizard-title {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--slate-text-title, #0f172a);
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.back-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.wizard-body {
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 410px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+}
+
+.form-label {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--slate-text-body, #334155);
+}
+
+.char-count {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  color: var(--slate-text-subtle, #64758b);
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.input-container {
+  width: 100%;
+  position: relative;
+}
+
+.form-input {
+  width: 100%;
+  height: 40px;
+  padding: 10px 60px 10px 12px; /* Extra right padding for char-count */
+  border: 1.5px solid var(--slate-border-light, #e2e8f0);
+  border-radius: 6px;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  color: var(--slate-text-body, #334155);
+  outline: none;
+}
+
+.form-input::placeholder {
+  color: var(--slate-text-disabled, #94a3b8);
+}
+
+.form-input:focus {
+  border-color: var(--primary-surface-default, #276cf0);
+}
+
+.number-input-group {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+}
+
+.country-dropdown-container {
+  position: relative;
+  min-width: 180px; /* Set to accommodate "United Kingdom" comfortably */
+}
+
+.country-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 10px;
+  border: 1.5px solid var(--slate-border-light, #e2e8f0);
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: white;
+}
+
+.country-flag {
+  font-size: 20px;
+}
+
+.country-name {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  color: var(--slate-text-body, #334155);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-chevron {
+  width: 12px;
+  height: 12px;
+}
+
+.country-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  margin-top: 4px;
+  background-color: white;
+  border: 1px solid var(--slate-border-light, #e2e8f0);
+  border-radius: 6px;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  z-index: 10;
+  overflow: hidden;
+}
+
+.country-search-container {
+  padding: 8px;
+  border-bottom: 1px solid var(--slate-border-light, #e2e8f0);
+}
+
+.country-search-input {
+  width: 100%;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--slate-border-light, #e2e8f0);
+  border-radius: 4px;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 13px;
+  outline: none;
+}
+
+.country-search-input:focus {
+  border-color: var(--primary-surface-default, #276cf0);
+}
+
+.country-list {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.country-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.country-option:hover {
+  background-color: var(--slate-surface-hover, #f1f5f9);
+}
+
+.country-option-flag {
+  font-size: 18px;
+}
+
+.country-option-name {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  color: var(--slate-text-body, #334155);
+}
+
+.number-display {
+  flex: 1;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  background-color: var(--slate-surface-disabled, #e2e8f0);
+  border-radius: 6px;
+}
+
+.phone-number {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  color: var(--slate-text-body, #334155);
+}
+
+.members-select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  padding: 0 12px;
+  border: 1.5px solid var(--slate-border-light, #e2e8f0);
+  border-radius: 6px;
+  background-color: white;
+}
+
+.member-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 6px;
+  background-color: var(--slate-surface-subtle, #f8fafc);
+  border-radius: 4px;
+}
+
+.member-chip span {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 12px;
+  color: var(--slate-text-body, #334155);
+}
+
+.chip-remove {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: var(--slate-text-subtle, #64758b);
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.btn-continue {
+  height: 36px;
+  padding: 0 20px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--slate-surface-disabled, #e2e8f0);
+  color: var(--slate-text-disabled, #94a3b8);
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: not-allowed;
+  margin-top: 8px;
+  align-self: flex-start;
+  transition: all 0.2s;
+}
+
+.btn-continue.active {
+  background-color: var(--primary-surface-default, #276cf0);
+  color: white;
+  cursor: pointer;
+}
+
+.btn-continue.active:hover {
+  background-color: #1e5ad0;
+}
+
+.form-input.no-char-count {
+  padding-right: 12px;
+}
+
+.form-textarea {
+  width: 100%;
+  height: 80px;
+  padding: 10px 12px;
+  border: 1.5px solid var(--slate-border-light, #e2e8f0);
+  border-radius: 6px;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  color: var(--slate-text-body, #334155);
+  outline: none;
+  resize: none;
+}
+
+.form-textarea:focus {
+  border-color: var(--primary-surface-default, #276cf0);
+}
+
+.btn-save {
+  height: 36px;
+  padding: 0 20px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--primary-surface-default, #276cf0);
+  color: white;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 8px;
+  align-self: flex-start;
+}
+
+.btn-save:hover {
+  background-color: #1e5ad0;
+}

@@ -11,13 +11,16 @@ import newConversationIcon from '../assets/icons/new-conversation.svg';
 import sentIcon from '../assets/icons/sent.svg';
 import tagsIcon from '../assets/icons/tags.svg';
 import unassignedIcon from '../assets/icons/unassigned.svg';
+import voiceInboxIcon from '../assets/icons/voice-inbox.svg';
+import tickIcon from '../assets/icons/Read/tick-icon-flyout.svg';
 
 import sChevronDown from '../assets/icons/Read/side-bar-chevron.svg';
 
-const MainSidebarPanel = ({ activeFilter, onFilterChange }) => {
+const MainSidebarPanel = ({ activeFilter, onFilterChange, voiceInboxes = [] }) => {
   const [expandedInboxes, setExpandedInboxes] = React.useState({
     support: true,
-    finance: false
+    finance: false,
+    voice: true
   });
 
   const toggleInbox = (inbox) => {
@@ -65,22 +68,65 @@ const MainSidebarPanel = ({ activeFilter, onFilterChange }) => {
           <span className="count">{counts[`${inboxName}-Unassigned`]}</span>
         </div>
 
-      <div className="nav-item">
-        <div className="nav-content">
-          <img src={tagsIcon} alt="" width="16" height="16" className="item-icon" />
-          <span>Tags</span>
+        <div className="nav-item">
+          <div className="nav-content">
+            <img src={tagsIcon} alt="" width="16" height="16" className="item-icon" />
+            <span>Tags</span>
+          </div>
         </div>
-      </div>
 
-      <div className="nav-item">
-        <div className="nav-content">
-          <img src={allViewsIcon} alt="" width="16" height="16" className="item-icon" />
-          <span>All Views</span>
+        <div className="nav-item">
+          <div className="nav-content">
+            <img src={allViewsIcon} alt="" width="16" height="16" className="item-icon" />
+            <span>All Views</span>
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
+
+  const renderVoiceNestedItems = () => {
+    return (
+      <div className="nav-group-nested">
+        <div className="nav-item">
+          <div className="nav-content">
+            <img src={unassignedIcon} alt="" width="16" height="16" className="item-icon" />
+            <span>Unassigned</span>
+          </div>
+          <span className="count">7</span>
+        </div>
+        
+        <div className="nav-item">
+          <div className="nav-content">
+            <img src={mineIcon} alt="" width="16" height="16" className="item-icon" />
+            <span>Mine</span>
+          </div>
+          <span className="count">1</span>
+        </div>
+
+        <div className="nav-item">
+          <div className="nav-content">
+            <img src={assignedToMeIcon} alt="" width="16" height="16" className="item-icon" />
+            <span>All assigned</span>
+          </div>
+        </div>
+
+        <div className="nav-item">
+          <div className="nav-content">
+            <img src={tagsIcon} alt="" width="16" height="16" className="item-icon" />
+            <span>Tags</span>
+          </div>
+        </div>
+
+        <div className="nav-item">
+          <div className="nav-content">
+            <img src={tickIcon} alt="" width="16" height="16" className="item-icon" />
+            <span>Closed</span>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="side-nav-expanded">
@@ -166,6 +212,34 @@ const MainSidebarPanel = ({ activeFilter, onFilterChange }) => {
             </div>
           </div>
         </div>
+
+        {voiceInboxes.length > 0 && (
+          <>
+            <div className="section-title margin-top">Voice</div>
+            <div className="nav-group">
+              {voiceInboxes.map((inbox, index) => (
+                <React.Fragment key={index}>
+                  <div 
+                    className={`nav-item accordion-trigger ${expandedInboxes[`voice-${index}`] !== false ? 'expanded' : ''}`}
+                    onClick={() => toggleInbox(`voice-${index}`)}
+                  >
+                    <div className="nav-content">
+                      <img src={voiceInboxIcon} alt="" width="16" height="16" className="item-icon" />
+                      <span>{inbox.name}</span>
+                    </div>
+                    <img 
+                      src={sChevronDown} 
+                      alt="" 
+                      className={`chevron-icon ${expandedInboxes[`voice-${index}`] !== false ? 'up' : ''}`} 
+                    />
+                  </div>
+
+                  {expandedInboxes[`voice-${index}`] !== false && renderVoiceNestedItems()}
+                </React.Fragment>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

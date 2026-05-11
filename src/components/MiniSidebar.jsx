@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import ProfileModal from '../ProfileModal';
 
 // SVG Icons from local assets
@@ -9,10 +9,15 @@ import helpIcon from '../assets/icons/help.svg';
 import hiverLogo from '../assets/icons/hiver-logo.svg';
 import inboxesIcon from '../assets/icons/inboxes.svg';
 import notificationIcon from '../assets/icons/notification.svg';
+import customersIcon from '../assets/icons/customers.svg';
+import templatesIcon from '../assets/icons/templates.svg';
 import settingsIcon from '../assets/icons/settings.svg';
 
 const MiniSidebar = ({ showProfileModal, setShowProfileModal }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isActive = (path) => location.pathname === path;
 
   return (
     <div className="mini-sidebar">
@@ -21,7 +26,10 @@ const MiniSidebar = ({ showProfileModal, setShowProfileModal }) => {
           <img src={hiverLogo} alt="Hiver" width="28" height="28" />
         </div>
         <div className="mini-nav">
-          <div className="mini-item active">
+          <div 
+            className={`mini-item ${isActive('/') ? 'active' : ''}`} 
+            onClick={() => navigate('/')}
+          >
              <img src={inboxesIcon} alt="Inboxes" width="16" height="16" />
           </div>
           <div className="mini-item notification-wrapper">
@@ -29,9 +37,18 @@ const MiniSidebar = ({ showProfileModal, setShowProfileModal }) => {
             <div className="notification-dot"></div>
           </div>
           <div className="mini-item">
-            <img src={analyticsIcon} alt="Analytics" width="16" height="16" />
+            <img src={customersIcon} alt="Customers" width="16" height="16" />
           </div>
           <div className="mini-item">
+            <img src={templatesIcon} alt="Templates" width="16" height="16" />
+          </div>
+          <div className="mini-item">
+            <img src={analyticsIcon} alt="Analytics" width="16" height="16" />
+          </div>
+          <div 
+            className={`mini-item ${isActive('/admin') ? 'active' : ''}`} 
+            onClick={() => navigate('/admin')}
+          >
             <img src={settingsIcon} alt="Settings" width="16" height="16" />
           </div>
         </div>

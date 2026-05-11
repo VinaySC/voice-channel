@@ -1,10 +1,14 @@
 import React from 'react';
+import { Agentation } from "agentation";
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import Sidebar from './Sidebar';
+import MainSidebarPanel from './components/MainSidebarPanel';
+import MiniSidebar from './components/MiniSidebar';
 import ConversationList from './components/ConversationList';
 import ConversationDetail from './components/ConversationDetail';
 import RightPanel from './components/RightPanel';
+import AdminPage from './pages/AdminPage';
 import { useState } from 'react';
 
 const conversationsData = [
@@ -987,6 +991,7 @@ const conversationsData = [
 function App() {
   const [selectedId, setSelectedId] = useState(1);
   const [activeFilter, setActiveFilter] = useState({ inbox: 'Support', type: 'Mine' });
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
   const filteredConversations = conversationsData.filter(c => 
     c.inbox === activeFilter.inbox && c.type === activeFilter.type
@@ -1002,34 +1007,56 @@ function App() {
 
   const [signatures, setSignatures] = useState([]);
   const [defaultSignatureId, setDefaultSignatureId] = useState(null);
+  const [voiceInboxes, setVoiceInboxes] = useState([]);
 
   const selectedConversation = conversationsData.find(c => c.id === selectedId);
 
   return (
     <div className="app-container">
-      <Routes>
-        <Route path="/" element={
-          <>
-            <Sidebar 
-              activeFilter={activeFilter}
-              onFilterChange={setActiveFilter}
+      <MiniSidebar 
+        showProfileModal={showProfileModal} 
+        setShowProfileModal={setShowProfileModal} 
+      />
+      <div className="main-content-wrapper" style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+        <Routes>
+          <Route path="/" element={
+            <>
+              <MainSidebarPanel 
+                activeFilter={activeFilter}
+                onFilterChange={setActiveFilter}
+                voiceInboxes={voiceInboxes}
+              />
+              <ConversationList 
+                conversations={filteredConversations} 
+                selectedId={selectedId} 
+                onSelect={setSelectedId} 
+                activeFilter={activeFilter}
+              />
+              <ConversationDetail 
+                conversation={selectedConversation} 
+                signatures={signatures}
+                setSignatures={setSignatures}
+                defaultSignatureId={defaultSignatureId}
+              />
+              <RightPanel />
+            </>
+          } />
+          <Route path="/admin" element={
+            <AdminPage 
+              voiceInboxes={voiceInboxes} 
+              setVoiceInboxes={setVoiceInboxes} 
             />
-            <ConversationList 
-              conversations={filteredConversations} 
-              selectedId={selectedId} 
-              onSelect={setSelectedId} 
-              activeFilter={activeFilter}
-            />
-            <ConversationDetail 
-              conversation={selectedConversation} 
-              signatures={signatures}
-              setSignatures={setSignatures}
-              defaultSignatureId={defaultSignatureId}
-            />
-            <RightPanel />
-          </>
-        } />
-      </Routes>
+          } />
+        </Routes>
+      </div>
+      {process.env.NODE_ENV === "development" && (
+        <Agentation 
+          endpoint="http://localhost:4747" 
+          onSessionCreated={(sessionId) => {
+            console.log("Agentation session started:", sessionId);
+          }}
+        />
+      )}
     </div>
   );
 }
