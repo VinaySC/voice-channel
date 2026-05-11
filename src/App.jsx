@@ -5,7 +5,6 @@ import Sidebar from './Sidebar';
 import ConversationList from './components/ConversationList';
 import ConversationDetail from './components/ConversationDetail';
 import RightPanel from './components/RightPanel';
-import SettingsPage from './pages/SettingsPage';
 import { useState } from 'react';
 
 const conversationsData = [
@@ -1029,14 +1028,6 @@ function App() {
             />
             <RightPanel />
           </>
-        } />
-        <Route path="/settings" element={
-          <SettingsPage 
-            signatures={signatures}
-            setSignatures={setSignatures}
-            defaultSignatureId={defaultSignatureId}
-            setDefaultSignatureId={setDefaultSignatureId}
-          />
         } />
       </Routes>
     </div>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './ConversationDetail.css';
-import ReplySection from './ReplySection';
 
 // Icons
 import titleUnread from '../assets/icons/title-unreaed.svg';
@@ -17,12 +16,10 @@ import chevronDownIcon from '../assets/icons/s-chevron-down.svg';
 
 const ConversationDetail = ({ conversation, signatures, setSignatures, defaultSignatureId }) => {
   const [expandedIds, setExpandedIds] = useState([]);
-  const [activeReplyId, setActiveReplyId] = useState(null);
 
   useEffect(() => {
     if (conversation && conversation.messages.length > 0) {
       setExpandedIds([conversation.messages[0].id]);
-      setActiveReplyId(null);
     }
   }, [conversation]);
 
@@ -32,10 +29,7 @@ const ConversationDetail = ({ conversation, signatures, setSignatures, defaultSi
     );
   };
 
-  const handleReplyAll = (e, id) => {
-    e.stopPropagation();
-    setActiveReplyId(prev => prev === id ? null : id);
-  };
+
 
   if (!conversation) return <div className="conversation-detail">Select a conversation</div>;
 
@@ -65,10 +59,10 @@ const ConversationDetail = ({ conversation, signatures, setSignatures, defaultSi
         <div className="subject-bar-detail">
           <h1 className="subject-text-large">{conversation.subject}</h1>
           <div className="subject-actions">
-             <button className="icon-btn" onClick={(e) => handleReplyAll(e, expandedIds[0] || (conversation.messages.length > 0 ? conversation.messages[0].id : null))}>
+             <button className="icon-btn">
                <img src={replyIcon} alt="Reply" width="16" height="16" />
              </button>
-             <button className="icon-btn" onClick={(e) => handleReplyAll(e, expandedIds[0])}>
+             <button className="icon-btn">
                <img src={replyAllIcon} alt="Reply All" width="16" height="16" />
              </button>
              <button className="icon-btn">
@@ -81,24 +75,9 @@ const ConversationDetail = ({ conversation, signatures, setSignatures, defaultSi
         <div className="messages-container">
           {conversation.messages.map((msg) => {
             const isExpanded = expandedIds.includes(msg.id);
-            const isReplying = activeReplyId === msg.id;
-   
+
             return (
               <React.Fragment key={msg.id}>
-                {isReplying && (
-                  <ReplySection 
-                    recipientEmail={msg.email} 
-                    signatures={signatures}
-                    setSignatures={setSignatures}
-                    defaultSignatureId={defaultSignatureId}
-                    currentInbox={conversation.inbox}
-                    onDiscard={(e) => {
-                      e.stopPropagation();
-                      setActiveReplyId(null);
-                    }}
-                  />
-                )}
-                
                 {isExpanded ? (
                   <div className="convo-card">
                     <div className="convo-card-header">
@@ -113,7 +92,7 @@ const ConversationDetail = ({ conversation, signatures, setSignatures, defaultSi
                       </div>
                       <div className="header-actions-right">
                         <span className="convo-time">{msg.time}</span>
-                        <button className="icon-btn" onClick={(e) => handleReplyAll(e, msg.id)}>
+                        <button className="icon-btn">
                            <img src={replyAllIcon} alt="Reply All" width="16" height="16" />
                         </button>
                         <button className="icon-btn">
@@ -130,7 +109,7 @@ const ConversationDetail = ({ conversation, signatures, setSignatures, defaultSi
                     </div>
                     <button className="btn-more-content">...</button>
                     <div className="convo-actions">
-                      <button className="convo-btn" onClick={(e) => handleReplyAll(e, msg.id)}>
+                      <button className="convo-btn">
                         <img src={smallReplyIcon} alt="" width="14" height="14" /> Reply
                       </button>
                       <button className="convo-btn">

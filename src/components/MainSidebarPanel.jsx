@@ -17,10 +17,7 @@ import sChevronDown from '../assets/icons/Read/side-bar-chevron.svg';
 const MainSidebarPanel = ({ activeFilter, onFilterChange }) => {
   const [expandedInboxes, setExpandedInboxes] = React.useState({
     support: true,
-    finance: false,
-    shipping: false,
-    refund: false,
-    itSupport: false
+    finance: false
   });
 
   const toggleInbox = (inbox) => {
@@ -106,12 +103,6 @@ const MainSidebarPanel = ({ activeFilter, onFilterChange }) => {
         <div className="section-title">Shared Inbox</div>
         
         <div className="nav-group">
-          <div className="nav-item">
-            <div className="nav-content">
-              <img src={assignedToMeIcon} alt="" width="16" height="16" className="item-icon" />
-              <span>Assigned to me</span>
-            </div>
-          </div>
 
           <div 
             className={`nav-item accordion-trigger ${expandedInboxes.support ? 'expanded' : ''}`}
@@ -147,56 +138,7 @@ const MainSidebarPanel = ({ activeFilter, onFilterChange }) => {
 
           {expandedInboxes.finance && renderNestedItems('Finance')}
 
-          <div 
-            className={`nav-item accordion-trigger ${expandedInboxes.shipping ? 'expanded' : ''}`}
-            onClick={() => toggleInbox('shipping')}
-          >
-            <div className="nav-content">
-              <img src={inboxIcon} alt="" width="16" height="16" className="item-icon" />
-              <span>Shipping</span>
-            </div>
-            <img 
-              src={sChevronDown} 
-              alt="" 
-              className={`chevron-icon ${expandedInboxes.shipping ? 'up' : ''}`} 
-            />
-          </div>
 
-          {expandedInboxes.shipping && renderNestedItems('Shipping')}
-
-          <div 
-            className={`nav-item accordion-trigger ${expandedInboxes.refund ? 'expanded' : ''}`}
-            onClick={() => toggleInbox('refund')}
-          >
-            <div className="nav-content">
-              <img src={inboxIcon} alt="" width="16" height="16" className="item-icon" />
-              <span>Refund</span>
-            </div>
-            <img 
-              src={sChevronDown} 
-              alt="" 
-              className={`chevron-icon ${expandedInboxes.refund ? 'up' : ''}`} 
-            />
-          </div>
-
-          {expandedInboxes.refund && renderNestedItems('Refund')}
-
-          <div 
-            className={`nav-item accordion-trigger ${expandedInboxes.itSupport ? 'expanded' : ''}`}
-            onClick={() => toggleInbox('itSupport')}
-          >
-            <div className="nav-content">
-              <img src={inboxIcon} alt="" width="16" height="16" className="item-icon" />
-              <span>IT Support</span>
-            </div>
-            <img 
-              src={sChevronDown} 
-              alt="" 
-              className={`chevron-icon ${expandedInboxes.itSupport ? 'up' : ''}`} 
-            />
-          </div>
-
-          {expandedInboxes.itSupport && renderNestedItems('IT Support')}
         </div>
 
         <div className="section-title margin-top">More</div>
