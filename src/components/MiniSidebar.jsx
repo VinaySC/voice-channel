@@ -51,6 +51,7 @@ const MiniSidebar = ({ showProfileModal, setShowProfileModal }) => {
           >
             <img src={settingsIcon} alt="Settings" width="16" height="16" />
           </div>
+          
         </div>
       </div>
       <div className="mini-bottom">

@@ -997,6 +997,7 @@ function App() {
     c.inbox === activeFilter.inbox && c.type === activeFilter.type
   );
 
+
   React.useEffect(() => {
     if (filteredConversations.length > 0) {
       setSelectedId(filteredConversations[0].id);
