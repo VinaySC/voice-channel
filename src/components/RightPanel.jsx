@@ -143,7 +143,7 @@ const RightPanel = () => {
             <div className="system-event">
               <img src={sText} alt="" width="14" height="14" className="event-icon" />
               <div className="convo-info">
-                 <p className="event-text">Assigned to Shankar Hiver through auto assignment</p>
+                 <p className="event-text">Assigned to Vinay K through auto assignment</p>
                  <span className="activity-time">01:02 PM</span>
               </div>
             </div>
