@@ -212,37 +212,20 @@ const MainSidebarPanel = ({ activeFilter, onFilterChange, voiceInboxes = [], onS
           </div>
         </div>
 
-        { (voiceInboxes.length > 0 || true) && (
+        {voiceInboxes.length > 0 && (
           <>
             <div className="section-title margin-top">Voice</div>
             <div className="nav-group">
-              {/* Simulation/Demo Inbox */}
-              <div 
-                className={`nav-item accordion-trigger ${expandedInboxes['voice-simulation'] ? 'expanded' : ''}`}
-                onClick={() => toggleInbox('voice-simulation')}
-              >
-                <div className="nav-content" onClick={(e) => {
-                  e.stopPropagation();
-                  onSimulateCall();
-                }} title="Click to simulate call">
-                  <img src={voiceInboxIcon} alt="" width="16" height="16" className="item-icon" />
-                  <span>Call Support</span>
-                </div>
-                <img 
-                  src={sChevronDown} 
-                  alt="" 
-                  className={`chevron-icon ${expandedInboxes['voice-simulation'] ? 'up' : ''}`} 
-                />
-              </div>
-              {expandedInboxes['voice-simulation'] && renderVoiceNestedItems()}
-
               {voiceInboxes.map((inbox, index) => (
                 <React.Fragment key={index}>
                   <div 
                     className={`nav-item accordion-trigger ${expandedInboxes[`voice-${index}`] !== false ? 'expanded' : ''}`}
                     onClick={() => toggleInbox(`voice-${index}`)}
                   >
-                    <div className="nav-content">
+                    <div className="nav-content" onClick={(e) => {
+                      e.stopPropagation();
+                      onSimulateCall();
+                    }} title="Click to simulate call">
                       <img src={voiceInboxIcon} alt="" width="16" height="16" className="item-icon" />
                       <span>{inbox.name}</span>
                     </div>
