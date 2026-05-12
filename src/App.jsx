@@ -1,6 +1,6 @@
 import React from 'react';
 import { Agentation } from "agentation";
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
 import Sidebar from './Sidebar';
 import MainSidebarPanel from './components/MainSidebarPanel';
@@ -9,7 +9,11 @@ import ConversationList from './components/ConversationList';
 import ConversationDetail from './components/ConversationDetail';
 import RightPanel from './components/RightPanel';
 import AdminPage from './pages/AdminPage';
+import ActiveCallView from './pages/ActiveCallView';
 import IncomingCallStrip from './components/IncomingCallStrip';
+import TranscriptToast from './components/TranscriptToast';
+import incomingCallAudio from './assets/audio/incoming-call.mp3';
+import callEndAudio from './assets/audio/call-end.wav';
 import { useState } from 'react';
 
 const conversationsData = [
@@ -990,15 +994,19 @@ const conversationsData = [
 ];
 
 function App() {
+  const navigate = useNavigate();
   const [selectedId, setSelectedId] = useState(1);
   const [activeFilter, setActiveFilter] = useState({ inbox: 'Support', type: 'Mine' });
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [isCallIncoming, setIsCallIncoming] = useState(false);
+  const [isCallAccepted, setIsCallAccepted] = useState(false);
+  const [connectedSeconds, setConnectedSeconds] = useState(0);
+  const [isCallEndedGlobally, setIsCallEndedGlobally] = useState(false);
+  const [isTranscriptReadyGlobally, setIsTranscriptReadyGlobally] = useState(false);
 
   const filteredConversations = conversationsData.filter(c => 
     c.inbox === activeFilter.inbox && c.type === activeFilter.type
   );
-
 
   React.useEffect(() => {
     if (filteredConversations.length > 0) {
@@ -1008,9 +1016,60 @@ function App() {
     }
   }, [activeFilter.inbox, activeFilter.type]);
 
+  React.useEffect(() => {
+    let interval;
+    if (isCallAccepted) {
+      interval = setInterval(() => {
+        setConnectedSeconds(prev => prev + 1);
+      }, 1000);
+    } else {
+      setConnectedSeconds(0);
+    }
+    return () => clearInterval(interval);
+  }, [isCallAccepted]);
+
   const [signatures, setSignatures] = useState([]);
   const [defaultSignatureId, setDefaultSignatureId] = useState(null);
   const [voiceInboxes, setVoiceInboxes] = useState([]);
+  const [activeInboxName, setActiveInboxName] = useState('Call Support');
+  const [isToastVisible, setIsToastVisible] = useState(false);
+  const [isToastExiting, setIsToastExiting] = useState(false);
+
+  const handleEndCall = () => {
+    new Audio(callEndAudio).play().catch(e => console.log('Audio play blocked or failed:', e));
+    setIsCallIncoming(false);
+    setIsCallAccepted(false);
+    setIsCallEndedGlobally(true);
+    setIsTranscriptReadyGlobally(false);
+
+    // After 6 seconds, the transcript is ready
+    setTimeout(() => {
+      setIsTranscriptReadyGlobally(true);
+
+      // If user is NOT on /active-call, show the toast
+      if (window.location.pathname !== '/active-call') {
+        setIsToastVisible(true);
+        setIsToastExiting(false);
+
+        // Auto-hide the toast after another 6 seconds
+        setTimeout(() => {
+          setIsToastExiting(true);
+          setTimeout(() => {
+            setIsToastVisible(false);
+            setIsToastExiting(false);
+          }, 500);
+        }, 6000);
+      }
+    }, 6000);
+  };
+
+  const handleCloseToast = () => {
+    setIsToastExiting(true);
+    setTimeout(() => {
+      setIsToastVisible(false);
+      setIsToastExiting(false);
+    }, 500);
+  };
 
   const selectedConversation = conversationsData.find(c => c.id === selectedId);
 
@@ -1026,9 +1085,23 @@ function App() {
             <>
               <MainSidebarPanel 
                 activeFilter={activeFilter}
-                onFilterChange={setActiveFilter}
+                onFilterChange={(filter) => {
+                  setActiveFilter(filter);
+                  if (filter.isVoiceInbox) {
+                    navigate('/active-call');
+                  }
+                }}
                 voiceInboxes={voiceInboxes}
-                onSimulateCall={() => setIsCallIncoming(true)}
+                onSimulateCall={(name) => {
+                  new Audio(incomingCallAudio).play().catch(e => console.log('Audio play blocked or failed:', e));
+                  setIsCallIncoming(true);
+                  setIsCallAccepted(false);
+                  setIsCallEndedGlobally(false);
+                  setIsTranscriptReadyGlobally(false);
+                  setConnectedSeconds(0);
+                  setActiveInboxName(name || 'Call Support');
+                }}
+                voiceMineCount={isCallAccepted ? 1 : 0}
               />
               <div className="content-area" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' }}>
                 <div className="panels-row" style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
@@ -1046,12 +1119,7 @@ function App() {
                   />
                   <RightPanel />
                 </div>
-                {isCallIncoming && (
-                  <IncomingCallStrip 
-                    onAccept={() => {}} 
-                    onReject={() => setIsCallIncoming(false)} 
-                  />
-                )}
+
               </div>
             </>
           } />
@@ -1061,6 +1129,29 @@ function App() {
               setVoiceInboxes={setVoiceInboxes} 
             />
           } />
+          <Route path="/active-call" element={
+            <>
+              <MainSidebarPanel 
+                activeFilter={{ inbox: activeInboxName, type: 'Mine', isVoiceInbox: true }} 
+                onFilterChange={(filter) => {
+                  setActiveFilter(filter);
+                  if (!filter.isVoiceInbox) {
+                    navigate('/');
+                  }
+                }}
+                voiceInboxes={voiceInboxes}
+                onSimulateCall={() => {}} 
+                voiceMineCount={isCallAccepted ? 1 : 0}
+              />
+              <ActiveCallView 
+                connectedSeconds={connectedSeconds}
+                inboxName={activeInboxName}
+                onEndCall={handleEndCall}
+                isCallEndedGlobally={isCallEndedGlobally}
+                isTranscriptReadyGlobally={isTranscriptReadyGlobally}
+              />
+            </>
+          } />
         </Routes>
       </div>
       {process.env.NODE_ENV === "development" && (
@@ -1068,6 +1159,28 @@ function App() {
           endpoint="http://localhost:4747" 
           onSessionCreated={(sessionId) => {
             console.log("Agentation session started:", sessionId);
+          }}
+        />
+      )}
+      {isCallIncoming && (
+        <IncomingCallStrip 
+          isAccepted={isCallAccepted}
+          connectedSeconds={connectedSeconds}
+          onAccept={() => setIsCallAccepted(true)} 
+          onReject={() => {
+            new Audio(callEndAudio).play().catch(e => console.log('Audio play blocked or failed:', e));
+            setIsCallIncoming(false);
+            setIsCallAccepted(false);
+          }} 
+        />
+      )}
+      {isToastVisible && (
+        <TranscriptToast 
+          isExiting={isToastExiting}
+          onClose={handleCloseToast}
+          onClick={() => {
+            navigate('/active-call');
+            setIsToastVisible(false);
           }}
         />
       )}

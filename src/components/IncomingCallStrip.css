@@ -14,6 +14,11 @@
   animation: slideOut 150ms ease-in forwards;
 }
 
+.incoming-call-strip-container.no-animation {
+  animation: none;
+  transform: translateY(0);
+}
+
 @keyframes slideIn {
   from { transform: translateY(100%); }
   to { transform: translateY(0); }

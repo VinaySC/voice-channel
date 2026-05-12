@@ -148,16 +148,16 @@
 .side-nav-expanded {
   width: 240px;
   background-color: var(--slateSurfaceSubtle);
+  border-right: 1px solid var(--slateBorderMild, #edf1f6);
   display: flex;
   flex-direction: column;
 }
 
 .panel-header-top {
-  height: 84px;
+  height: 44px;
   padding: 8px;
   display: flex;
   flex-direction: column;
-  gap: 13px;
   flex-shrink: 0;
 }
 
@@ -181,6 +181,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+  gap: 12px;
 }
 
 .search-container {

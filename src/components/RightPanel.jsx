@@ -1,150 +1,239 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './RightPanel.css';
 
+
 // Icons
-import tabsMail from '../assets/icons/tabs-mail.svg';
-import tabsApps from '../assets/icons/tabs-apps.svg';
-import tabsClose from '../assets/icons/tabs-close.svg';
 import sAssigned from '../assets/icons/s-assigned.svg';
 import sStatus from '../assets/icons/s-status.svg';
 import sTags from '../assets/icons/s-tags.svg';
-import sDate from '../assets/icons/s-date.svg';
-import sPriority from '../assets/icons/s-priority.svg';
-import sText from '../assets/icons/s-text.svg';
+import sChevronDown from '../assets/icons/s-chevron-down.svg';
+import customerNameIcon from '../assets/icons/customer-name.svg';
+import emailIcon from '../assets/icons/email-icon.svg';
+import phoneIcon from '../assets/icons/phone-icon.svg';
 import addIcon from '../assets/icons/add-icon.svg';
-import newConversationIcon from '../assets/icons/new-conversation.svg';
-import notificationIcon from '../assets/icons/notification.svg';
+import incomingCall14 from '../assets/icons/incoming-call-14.svg';
+import tabsMail from '../assets/icons/tabs-mail.svg';
+import tabsApps from '../assets/icons/tabs-apps.svg';
+import tabsClose from '../assets/icons/tabs-close.svg';
 
-const RightPanel = () => {
+const RightPanel = ({ isFullView = false, inboxName = 'Call Support' }) => {
+  const [isCustomerDetailsOpen, setIsCustomerDetailsOpen] = useState(true);
+  const [isPrevConvosOpen, setIsPrevConvosOpen] = useState(true);
+  const [activeTab, setActiveTab] = useState('All Activities');
+  const [isContactDropdownOpen, setIsContactDropdownOpen] = useState(false);
+  const [contactSearchTerm, setContactSearchTerm] = useState('');
+  
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsContactDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
+
   return (
     <div className="right-panel">
-      {/* Connector Tabs */}
-      <div className="panel-tabs">
-        <div className="tabs-left">
-          <div className="panel-tab active">
-            <img src={tabsMail} alt="Mail" width="16" height="16" />
+      {/* Connector Tabs - Only for home view */}
+      {!isFullView && (
+        <div className="panel-tabs">
+          <div className="tabs-left">
+            <div className="panel-tab active">
+              <img src={tabsMail} alt="Mail" width="16" height="16" />
+            </div>
+            <div className="panel-tab">
+              <img src={tabsApps} alt="Apps" width="16" height="16" />
+            </div>
           </div>
-          <div className="panel-tab">
-            <img src={tabsApps} alt="Apps" width="16" height="16" />
-          </div>
+          <button className="icon-btn-close">
+            <img src={tabsClose} alt="Close" width="16" height="16" />
+          </button>
         </div>
-        <button className="icon-btn">
-          <img src={tabsClose} alt="Close" width="16" height="16" />
-        </button>
-      </div>
+      )}
 
       <div className="panel-scroll-content">
-        {/* Sales Inbox Section */}
-        <div className="section-box">
-          <h2 className="section-title-panel">Sales Inbox</h2>
+        {/* Call Support Section */}
+        <div className="section-box no-border-top">
+          <h2 className="section-title-panel">{inboxName}</h2>
           <div className="property-list">
             <div className="property-item">
               <div className="property-label">
-                <img src={sAssigned} alt="" width="14" height="14" /> Assigned
+                <img src={sAssigned} alt="" width="14" height="14" />
+                <span>Assignee</span>
               </div>
-              <div className="property-value">Jakob Bergson</div>
+              <div className="property-value-wrapper">
+                <div className="avatar-small j-avatar">J</div>
+                <span className="property-value">Jakob Bergson</span>
+              </div>
             </div>
+            
             <div className="property-item">
               <div className="property-label">
-                <img src={sStatus} alt="" width="14" height="14" /> Status
+                <img src={sStatus} alt="" width="14" height="14" />
+                <span>Status</span>
               </div>
-              <div className="status-tag">
-                <div className="status-dot">
-                  <div className="status-dot-inner"></div>
-                </div>
-                <div className="property-value">Pending</div>
+              <div className="property-value-wrapper">
+                <div className="status-indicator-open"></div>
+                <span className="property-value">Open</span>
               </div>
             </div>
+
             <div className="property-item">
               <div className="property-label">
-                <img src={sTags} alt="" width="14" height="14" /> Tags
+                <img src={sTags} alt="" width="14" height="14" />
+                <span>Tags</span>
               </div>
-              <div className="property-value placeholder">
-                <img src={addIcon} alt="" width="16" height="16" style={{ marginRight: 8, verticalAlign: 'middle' }} />
-                Add tags
+              <div className="property-value-wrapper link-style">
+                <img src={addIcon} alt="" width="16" height="16" />
+                <span className="property-value subtle">Add tags</span>
               </div>
-            </div>
-            <div className="property-item">
-              <div className="property-label">
-                <img src={sDate} alt="" width="14" height="14" /> Due Date
-              </div>
-              <div className="property-value">25 May 2025</div>
-            </div>
-            <div className="property-item">
-              <div className="property-label">
-                <img src={sPriority} alt="" width="14" height="14" /> Priority
-              </div>
-              <div className="property-value">High</div>
-            </div>
-            <div className="property-item" style={{ height: 'auto', alignItems: 'flex-start', paddingTop: 8 }}>
-              <div className="property-label">
-                <img src={sText} alt="" width="14" height="14" /> Note
-              </div>
-              <div className="property-value" style={{ whiteSpace: 'normal' }}>This is a high MRR customer</div>
             </div>
           </div>
         </div>
 
-        {/* Activity Panel */}
-        <div className="section-box" style={{ borderBottom: 'none' }}>
-          <div className="activity-tabs">
-            <div className="activity-tab active">All Activities</div>
-            <div className="activity-tab">Notes</div>
+        <div className="divider-h"></div>
+
+        {/* Customer Details Section */}
+        <div className="section-box">
+          <div className="section-header-toggle" onClick={() => setIsCustomerDetailsOpen(!isCustomerDetailsOpen)}>
+            <h2 className="section-title-panel">Customer details</h2>
+            <img 
+              src={sChevronDown} 
+              alt="" 
+              className={`chevron-toggle ${isCustomerDetailsOpen ? 'up' : ''}`} 
+              width="16" 
+              height="16" 
+            />
           </div>
           
-          <div className="note-input">
-            <img src={addIcon} alt="" width="16" height="16" />
-            <span className="note-placeholder">Add a note</span>
+          {isCustomerDetailsOpen && (
+            <div className="property-list">
+              <div className="property-item">
+                <div className="property-label">
+                  <img src={customerNameIcon} alt="" width="14" height="14" />
+                  <span>Name</span>
+                </div>
+                <div className="property-value-wrapper link-style relative-container" ref={dropdownRef}>
+                  <div className="add-contact-trigger" onClick={() => setIsContactDropdownOpen(!isContactDropdownOpen)}>
+                    <img src={addIcon} alt="" width="16" height="16" />
+                    <span className="property-value subtle">Add to contacts</span>
+                  </div>
+                  {isContactDropdownOpen && (
+                    <div className="contact-dropdown">
+                      <div className="contact-search-box">
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path fillRule="evenodd" clipRule="evenodd" d="M9.625 5.83333C9.625 7.92741 7.92741 9.625 5.83333 9.625C3.73925 9.625 2.04167 7.92741 2.04167 5.83333C2.04167 3.73925 3.73925 2.04167 5.83333 2.04167C7.92741 2.04167 9.625 3.73925 9.625 5.83333ZM8.84715 10.0846C7.9944 10.8252 6.95408 11.2583 5.83333 11.2583C2.83379 11.2583 0.408333 8.83288 0.408333 5.83333C0.408333 2.83379 2.83379 0.408333 5.83333 0.408333C8.83288 0.408333 11.2583 2.83379 11.2583 5.83333C11.2583 6.95408 10.8252 7.9944 10.0846 8.84715L13.1118 11.8744C13.4308 12.1933 13.4308 12.7104 13.1118 13.0293C12.7929 13.3483 12.2758 13.3483 11.9568 13.0293L8.84715 10.0846Z" fill="#94A3B8"/>
+                        </svg>
+                        <input 
+                          type="text" 
+                          placeholder="Search" 
+                          value={contactSearchTerm}
+                          onChange={(e) => setContactSearchTerm(e.target.value)}
+                        />
+                      </div>
+                      <div className="contact-list-container">
+                        <div className="contact-list-item">
+                          <div className="contact-avatar create-new">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path fillRule="evenodd" clipRule="evenodd" d="M7 11.6667C9.57733 11.6667 11.6667 9.57733 11.6667 7C11.6667 4.42267 9.57733 2.33333 7 2.33333C4.42267 2.33333 2.33333 4.42267 2.33333 7C2.33333 9.57733 4.42267 11.6667 7 11.6667ZM7 12.8333C10.2217 12.8333 12.8333 10.2217 12.8333 7C12.8333 3.77834 10.2217 1.16667 7 1.16667C3.77834 1.16667 1.16667 3.77834 1.16667 7C1.16667 10.2217 3.77834 12.8333 7 12.8333ZM6.41667 4.08333C6.41667 3.76117 6.67784 3.5 7 3.5C7.32216 3.5 7.58333 3.76117 7.58333 4.08333V6.41667H9.91667C10.2388 6.41667 10.5 6.67784 10.5 7C10.5 7.32216 10.2388 7.58333 9.91667 7.58333H7.58333V9.91667C7.58333 10.2388 7.32216 10.5 7 10.5C6.67784 10.5 6.41667 10.2388 6.41667 9.91667V7.58333H4.08333C3.76117 7.58333 3.5 7.32216 3.5 7C3.5 6.67784 3.76117 6.41667 4.08333 6.41667H6.41667V4.08333Z" fill="#64758B"/>
+                            </svg>
+                          </div>
+                          <span>Create a new contact</span>
+                        </div>
+                        <div className="contact-list-item">
+                          <div className="contact-avatar a-avatar">A</div>
+                          <span>Albert Flores</span>
+                        </div>
+                        <div className="contact-list-item">
+                          <div className="contact-avatar d-avatar">D</div>
+                          <span>Devon Lane</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              
+              <div className="property-item">
+                <div className="property-label">
+                  <img src={emailIcon} alt="" width="14" height="14" />
+                  <span>Email</span>
+                </div>
+                <div className="property-value">-</div>
+              </div>
+
+              <div className="property-item">
+                <div className="property-label">
+                  <img src={phoneIcon} alt="" width="14" height="14" />
+                  <span>Phone</span>
+                </div>
+                <div className="property-value">+91 98765 43210</div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="divider-h"></div>
+
+        {/* Previous Conversations Section */}
+        <div className="section-box">
+          <div className="section-header-toggle" onClick={() => setIsPrevConvosOpen(!isPrevConvosOpen)}>
+            <h2 className="section-title-panel">Previous Conversations</h2>
+            <img 
+              src={sChevronDown} 
+              alt="" 
+              className={`chevron-toggle ${isPrevConvosOpen ? 'up' : ''}`} 
+              width="16" 
+              height="16" 
+            />
+          </div>
+        </div>
+
+        <div className="divider-h"></div>
+
+        {/* Activities Section */}
+        <div className="section-box activities-section">
+          <div className="activity-tabs-row">
+            <div 
+              className={`activity-tab-item ${activeTab === 'All Activities' ? 'active' : ''}`}
+              onClick={() => setActiveTab('All Activities')}
+            >
+              All Activities
+            </div>
+            <div 
+              className={`activity-tab-item ${activeTab === 'Notes' ? 'active' : ''}`}
+              onClick={() => setActiveTab('Notes')}
+            >
+              Notes
+            </div>
           </div>
 
-          <div className="timeline">
+          <div className="note-input-container">
+             <div className="note-input-box">
+                <img src={addIcon} alt="" width="16" height="16" />
+                <span>Add a note</span>
+             </div>
+          </div>
+
+          <div className="timeline-container">
             <div className="timeline-date-divider">
               <div className="divider-line"></div>
-              <div className="date-pill">Today</div>
+              <div className="date-badge">Today</div>
               <div className="divider-line"></div>
             </div>
 
-            <div className="activity-card">
-              <div className="activity-user">Anna Kennedy</div>
-              <p className="activity-msg">Team, could we check what error was received?</p>
-              <span className="activity-time">01:02 PM</span>
-            </div>
-
-            <div className="system-event">
-              <img src={newConversationIcon} alt="" width="14" height="14" className="event-icon" />
-              <div className="convo-info">
-                 <p className="event-text">New conversation received in support</p>
-                 <span className="activity-time">01:02 PM</span>
+            <div className="timeline-event">
+              <div className="event-icon-circle">
+                <img src={incomingCall14} alt="" width="14" height="14" />
               </div>
-            </div>
-
-            <div className="timeline-date-divider">
-              <div className="divider-line"></div>
-              <div className="date-pill">Jun 27, 2025</div>
-              <div className="divider-line"></div>
-            </div>
-
-            <div className="system-event">
-              <img src={newConversationIcon} alt="" width="14" height="14" className="event-icon" />
-              <div className="convo-info">
-                 <p className="event-text">New conversation received in support</p>
-                 <span className="activity-time">01:02 PM</span>
-              </div>
-            </div>
-
-            <div className="system-event">
-              <img src={notificationIcon} alt="" width="14" height="14" className="event-icon" />
-              <div className="convo-info">
-                 <p className="event-text">Main SLA: First response is Overdue.</p>
-                 <span className="activity-time">01:02 PM</span>
-              </div>
-            </div>
-
-            <div className="system-event">
-              <img src={sText} alt="" width="14" height="14" className="event-icon" />
-              <div className="convo-info">
-                 <p className="event-text">Assigned to Vinay K through auto assignment</p>
-                 <span className="activity-time">01:02 PM</span>
+              <div className="event-content">
+                <p className="event-msg">Incoming call received in <strong>Call Support</strong></p>
+                <span className="event-time">01:02 PM</span>
               </div>
             </div>
           </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import './IncomingCallStrip.css';
 import { PhoneIncomingIcon } from "@animateicons/react/lucide";
 import callAcceptIcon from '../assets/icons/call-accept.svg';
@@ -11,22 +12,25 @@ import endCallIcon from '../assets/icons/end-call.svg';
 import fullViewIcon from '../assets/icons/full-view.svg';
 import phoneIncomingIcon from '../assets/icons/phone-incoming.svg';
 
-const IncomingCallStrip = ({ onAccept, onReject }) => {
+const IncomingCallStrip = ({ isAccepted, connectedSeconds, onAccept, onReject }) => {
+  const navigate = useNavigate();
   const [seconds, setSeconds] = useState(1);
-  const [connectedSeconds, setConnectedSeconds] = useState(0);
-  const [isAccepted, setIsAccepted] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
+  const [shouldAnimate, setShouldAnimate] = useState(!isAccepted);
   const iconRef = useRef(null);
+
+  useEffect(() => {
+    // Only animate on first mount if not already accepted
+    if (isAccepted) {
+      setShouldAnimate(false);
+    }
+  }, []);
 
   useEffect(() => {
     let interval;
     if (!isAccepted) {
       interval = setInterval(() => {
         setSeconds(prev => prev + 1);
-      }, 1000);
-    } else {
-      interval = setInterval(() => {
-        setConnectedSeconds(prev => prev + 1);
       }, 1000);
     }
     return () => clearInterval(interval);
@@ -46,7 +50,6 @@ const IncomingCallStrip = ({ onAccept, onReject }) => {
   }, [isAccepted]);
 
   const handleAccept = () => {
-    setIsAccepted(true);
     if (onAccept) onAccept();
   };
 
@@ -64,7 +67,7 @@ const IncomingCallStrip = ({ onAccept, onReject }) => {
   };
 
   return (
-    <div className={`incoming-call-strip-container ${isExiting ? 'exiting' : ''}`}>
+    <div className={`incoming-call-strip-container ${isExiting ? 'exiting' : ''} ${!shouldAnimate ? 'no-animation' : ''}`}>
       <div className="incoming-call-strip">
         <div className="profile-details">
           <div className="avatar-circle">
@@ -106,7 +109,7 @@ const IncomingCallStrip = ({ onAccept, onReject }) => {
                 <img src={phoneIncomingIcon} alt="" width="16" height="16" />
                 <span className="connected-status">Connected</span>
                 <span className="connected-timer">{formatTime(connectedSeconds)}</span>
-                <div className="call-action-item">
+                <div className="call-action-item" onClick={() => navigate('/active-call')}>
                   <img src={fullViewIcon} alt="" width="16" height="16" style={{ cursor: 'pointer' }} />
                   <span className="tooltip">Open full view</span>
                 </div>

@@ -13,10 +13,11 @@ import tagsIcon from '../assets/icons/tags.svg';
 import unassignedIcon from '../assets/icons/unassigned.svg';
 import voiceInboxIcon from '../assets/icons/voice-inbox.svg';
 import tickIcon from '../assets/icons/Read/tick-icon-flyout.svg';
+import searchIcon from '../assets/icons/search.svg';
 
 import sChevronDown from '../assets/icons/Read/side-bar-chevron.svg';
 
-const MainSidebarPanel = ({ activeFilter, onFilterChange, voiceInboxes = [], onSimulateCall }) => {
+const MainSidebarPanel = ({ activeFilter, onFilterChange, voiceInboxes = [], onSimulateCall, voiceMineCount = 0 }) => {
   const [expandedInboxes, setExpandedInboxes] = React.useState({
     support: true,
     finance: false,
@@ -68,7 +69,7 @@ const MainSidebarPanel = ({ activeFilter, onFilterChange, voiceInboxes = [], onS
           </div>
           <span className="count">{counts[`${inboxName}-Unassigned`]}</span>
         </div>
-
+ 
         <div className="nav-item">
           <div className="nav-content">
             <img src={tagsIcon} alt="" width="16" height="16" className="item-icon" />
@@ -86,21 +87,28 @@ const MainSidebarPanel = ({ activeFilter, onFilterChange, voiceInboxes = [], onS
     );
   };
 
-  const renderVoiceNestedItems = () => {
+  const renderVoiceNestedItems = (inboxName, voiceMineCount) => {
     return (
       <div className="nav-group-nested">
-        <div className="nav-item">
+        <div 
+          className={`nav-item ${activeFilter.inbox === inboxName && activeFilter.type === 'Unassigned' ? 'active' : ''}`}
+          onClick={() => onFilterChange({ inbox: inboxName, type: 'Unassigned', isVoiceInbox: true })}
+        >
           <div className="nav-content">
             <img src={unassignedIcon} alt="" width="16" height="16" className="item-icon" />
             <span>Unassigned</span>
           </div>
         </div>
         
-        <div className="nav-item">
+        <div 
+          className={`nav-item ${activeFilter.inbox === inboxName && activeFilter.type === 'Mine' ? 'active' : ''}`}
+          onClick={() => onFilterChange({ inbox: inboxName, type: 'Mine', isVoiceInbox: true })}
+        >
           <div className="nav-content">
             <img src={mineIcon} alt="" width="16" height="16" className="item-icon" />
             <span>Mine</span>
           </div>
+          {voiceMineCount > 0 && <span className="count">{voiceMineCount}</span>}
         </div>
 
         <div className="nav-item">
@@ -133,13 +141,8 @@ const MainSidebarPanel = ({ activeFilter, onFilterChange, voiceInboxes = [], onS
         <div className="header-row">
           <h1>Conversations</h1>
           <div className="header-actions">
+            <img src={searchIcon} alt="Search" width="16" height="16" />
             <img src={newConversationIcon} alt="New" width="16" height="16" />
-          </div>
-        </div>
-        <div className="search-container">
-          <div className="search-box">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="text" placeholder="Search conversations" />
           </div>
         </div>
       </div>
@@ -222,9 +225,8 @@ const MainSidebarPanel = ({ activeFilter, onFilterChange, voiceInboxes = [], onS
                     className={`nav-item accordion-trigger ${expandedInboxes[`voice-${index}`] !== false ? 'expanded' : ''}`}
                     onClick={() => toggleInbox(`voice-${index}`)}
                   >
-                    <div className="nav-content" onClick={(e) => {
-                      e.stopPropagation();
-                      onSimulateCall();
+                    <div className="nav-content" onClick={() => {
+                      onSimulateCall(inbox.name);
                     }} title="Click to simulate call">
                       <img src={voiceInboxIcon} alt="" width="16" height="16" className="item-icon" />
                       <span>{inbox.name}</span>
@@ -236,7 +238,7 @@ const MainSidebarPanel = ({ activeFilter, onFilterChange, voiceInboxes = [], onS
                     />
                   </div>
 
-                  {expandedInboxes[`voice-${index}`] !== false && renderVoiceNestedItems()}
+                  {expandedInboxes[`voice-${index}`] !== false && renderVoiceNestedItems(inbox.name, voiceMineCount)}
                 </React.Fragment>
               ))}
             </div>
