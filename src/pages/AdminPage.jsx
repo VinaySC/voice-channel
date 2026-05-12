@@ -209,6 +209,7 @@ const AdminPage = ({ voiceInboxes, setVoiceInboxes }) => {
                             }}
                           >
                             <img src={deleteIcon} alt="Delete" width="14" height="14" />
+                            <span className="delete-tooltip">Delete</span>
                           </button>
                         </td>
                       </tr>
