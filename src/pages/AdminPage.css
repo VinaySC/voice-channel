@@ -195,7 +195,6 @@
   border-spacing: 0;
   border: 1px solid var(--slate-border-light, #e2e8f0);
   border-radius: 8px;
-  overflow: hidden;
   background-color: white;
 }
 
@@ -278,45 +277,36 @@
 
 
 
-/* Delete Tooltip */
-.delete-btn {
+/* Tooltip Styling */
+.call-action-item {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.delete-tooltip {
+.call-action-item .tooltip {
   position: absolute;
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   background-color: #334155;
   color: #ffffff;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 400;
   white-space: nowrap;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.15s ease, visibility 0.15s ease;
+  transition: opacity 0.1s, visibility 0.1s;
   pointer-events: none;
-  z-index: 100;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  z-index: 1000;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
-.delete-btn:hover .delete-tooltip {
+.call-action-item:hover .tooltip {
   opacity: 1;
   visibility: visible;
-}
-
-/* Tooltip triangle */
-.delete-tooltip::after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 5px;
-  border-style: solid;
-  border-color: #334155 transparent transparent transparent;
 }

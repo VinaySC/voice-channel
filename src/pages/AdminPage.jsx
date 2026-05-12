@@ -201,16 +201,18 @@ const AdminPage = ({ voiceInboxes, setVoiceInboxes }) => {
                           </div>
                         </td>
                         <td className="actions-cell">
-                          <button 
-                            className="icon-btn-secondary delete-btn"
-                            onClick={() => {
-                              const newList = voiceInboxes.filter((_, i) => i !== index);
-                              setVoiceInboxes(newList);
-                            }}
-                          >
-                            <img src={deleteIcon} alt="Delete" width="14" height="14" />
-                            <span className="delete-tooltip">Delete</span>
-                          </button>
+                          <div className="call-action-item">
+                            <button 
+                              className="icon-btn-secondary delete-btn"
+                              onClick={() => {
+                                const newList = voiceInboxes.filter((_, i) => i !== index);
+                                setVoiceInboxes(newList);
+                              }}
+                            >
+                              <img src={deleteIcon} alt="Delete" width="14" height="14" />
+                            </button>
+                            <span className="tooltip">Delete</span>
+                          </div>
                         </td>
                       </tr>
                     ))}
