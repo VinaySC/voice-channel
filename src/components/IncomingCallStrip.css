@@ -1,0 +1,112 @@
+.incoming-call-strip-container {
+  padding: 10px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  pointer-events: none; /* Let clicks pass through padding to content behind if any, but the strip itself needs clicks */
+}
+
+.incoming-call-strip {
+  pointer-events: auto; /* Enable clicks on the strip itself */
+  background-color: var(--slateTextBody, #334155);
+  border-radius: 8px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  width: 100%;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.profile-details {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 300px;
+}
+
+.avatar-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-name {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--slateTextCaption, #cbd5e1);
+}
+
+.call-info-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.call-info-badge {
+  background-color: var(--slateTextTitle, #0f172a);
+  border-radius: 40px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 20px;
+}
+
+.call-icon-animated {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.call-status, .call-timer {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--slateTextCaption, #cbd5e1);
+}
+
+.call-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  width: 300px;
+}
+
+.btn-accept, .btn-reject {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  transition: opacity 0.2s;
+}
+
+.btn-accept:hover, .btn-reject:hover {
+  opacity: 0.9;
+}
+
+.btn-accept {
+  background-color: var(--successTextSubtle, #2dbb6d);
+}
+
+.btn-reject {
+  background-color: var(--errorSurfaceDisabled, #eb5c5c);
+}

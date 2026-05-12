@@ -16,11 +16,12 @@ import tickIcon from '../assets/icons/Read/tick-icon-flyout.svg';
 
 import sChevronDown from '../assets/icons/Read/side-bar-chevron.svg';
 
-const MainSidebarPanel = ({ activeFilter, onFilterChange, voiceInboxes = [] }) => {
+const MainSidebarPanel = ({ activeFilter, onFilterChange, voiceInboxes = [], onSimulateCall }) => {
   const [expandedInboxes, setExpandedInboxes] = React.useState({
     support: true,
     finance: false,
-    voice: true
+    voice: true,
+    'voice-simulation': true
   });
 
   const toggleInbox = (inbox) => {
@@ -93,7 +94,6 @@ const MainSidebarPanel = ({ activeFilter, onFilterChange, voiceInboxes = [] }) =
             <img src={unassignedIcon} alt="" width="16" height="16" className="item-icon" />
             <span>Unassigned</span>
           </div>
-          <span className="count">7</span>
         </div>
         
         <div className="nav-item">
@@ -101,7 +101,6 @@ const MainSidebarPanel = ({ activeFilter, onFilterChange, voiceInboxes = [] }) =
             <img src={mineIcon} alt="" width="16" height="16" className="item-icon" />
             <span>Mine</span>
           </div>
-          <span className="count">1</span>
         </div>
 
         <div className="nav-item">
@@ -213,10 +212,30 @@ const MainSidebarPanel = ({ activeFilter, onFilterChange, voiceInboxes = [] }) =
           </div>
         </div>
 
-        {voiceInboxes.length > 0 && (
+        { (voiceInboxes.length > 0 || true) && (
           <>
             <div className="section-title margin-top">Voice</div>
             <div className="nav-group">
+              {/* Simulation/Demo Inbox */}
+              <div 
+                className={`nav-item accordion-trigger ${expandedInboxes['voice-simulation'] ? 'expanded' : ''}`}
+                onClick={() => toggleInbox('voice-simulation')}
+              >
+                <div className="nav-content" onClick={(e) => {
+                  e.stopPropagation();
+                  onSimulateCall();
+                }} title="Click to simulate call">
+                  <img src={voiceInboxIcon} alt="" width="16" height="16" className="item-icon" />
+                  <span>Call Support</span>
+                </div>
+                <img 
+                  src={sChevronDown} 
+                  alt="" 
+                  className={`chevron-icon ${expandedInboxes['voice-simulation'] ? 'up' : ''}`} 
+                />
+              </div>
+              {expandedInboxes['voice-simulation'] && renderVoiceNestedItems()}
+
               {voiceInboxes.map((inbox, index) => (
                 <React.Fragment key={index}>
                   <div 

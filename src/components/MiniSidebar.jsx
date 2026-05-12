@@ -31,25 +31,31 @@ const MiniSidebar = ({ showProfileModal, setShowProfileModal }) => {
             onClick={() => navigate('/')}
           >
              <img src={inboxesIcon} alt="Inboxes" width="16" height="16" />
+             <span className="tooltip">Conversations</span>
           </div>
           <div className="mini-item notification-wrapper">
             <img src={notificationIcon} alt="Notifications" width="16" height="16" />
             <div className="notification-dot"></div>
-          </div>
-          <div className="mini-item">
-            <img src={customersIcon} alt="Customers" width="16" height="16" />
+            <span className="tooltip">Notifications</span>
           </div>
           <div className="mini-item">
             <img src={templatesIcon} alt="Templates" width="16" height="16" />
+            <span className="tooltip">Templates</span>
+          </div>
+          <div className="mini-item">
+            <img src={customersIcon} alt="Customers" width="16" height="16" />
+            <span className="tooltip">Customers</span>
           </div>
           <div className="mini-item">
             <img src={analyticsIcon} alt="Analytics" width="16" height="16" />
+            <span className="tooltip">Analytics</span>
           </div>
           <div 
             className={`mini-item ${isActive('/admin') ? 'active' : ''}`} 
             onClick={() => navigate('/admin')}
           >
             <img src={settingsIcon} alt="Settings" width="16" height="16" />
+            <span className="tooltip">Admin Panel</span>
           </div>
           
         </div>

@@ -9,6 +9,7 @@ import ConversationList from './components/ConversationList';
 import ConversationDetail from './components/ConversationDetail';
 import RightPanel from './components/RightPanel';
 import AdminPage from './pages/AdminPage';
+import IncomingCallStrip from './components/IncomingCallStrip';
 import { useState } from 'react';
 
 const conversationsData = [
@@ -992,6 +993,7 @@ function App() {
   const [selectedId, setSelectedId] = useState(1);
   const [activeFilter, setActiveFilter] = useState({ inbox: 'Support', type: 'Mine' });
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [isCallIncoming, setIsCallIncoming] = useState(false);
 
   const filteredConversations = conversationsData.filter(c => 
     c.inbox === activeFilter.inbox && c.type === activeFilter.type
@@ -1026,20 +1028,31 @@ function App() {
                 activeFilter={activeFilter}
                 onFilterChange={setActiveFilter}
                 voiceInboxes={voiceInboxes}
+                onSimulateCall={() => setIsCallIncoming(true)}
               />
-              <ConversationList 
-                conversations={filteredConversations} 
-                selectedId={selectedId} 
-                onSelect={setSelectedId} 
-                activeFilter={activeFilter}
-              />
-              <ConversationDetail 
-                conversation={selectedConversation} 
-                signatures={signatures}
-                setSignatures={setSignatures}
-                defaultSignatureId={defaultSignatureId}
-              />
-              <RightPanel />
+              <div className="content-area" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' }}>
+                <div className="panels-row" style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+                  <ConversationList 
+                    conversations={filteredConversations} 
+                    selectedId={selectedId} 
+                    onSelect={setSelectedId} 
+                    activeFilter={activeFilter}
+                  />
+                  <ConversationDetail 
+                    conversation={selectedConversation} 
+                    signatures={signatures}
+                    setSignatures={setSignatures}
+                    defaultSignatureId={defaultSignatureId}
+                  />
+                  <RightPanel />
+                </div>
+                {isCallIncoming && (
+                  <IncomingCallStrip 
+                    onAccept={() => setIsCallIncoming(false)} 
+                    onReject={() => setIsCallIncoming(false)} 
+                  />
+                )}
+              </div>
             </>
           } />
           <Route path="/admin" element={
