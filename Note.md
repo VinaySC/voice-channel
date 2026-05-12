@@ -42,6 +42,9 @@
     <component path="src/components/IncomingCallStrip.jsx">
       A horizontal notification bar that appears at the bottom of the screen to simulate an incoming voice call.
     </component>
+    <component path="src/pages/AdminPage.jsx">
+      Admin management interface for Voice Inboxes. Handles listing and deletion of inboxes.
+    </component>
   </core_components>
 
   <project_history>
@@ -49,11 +52,11 @@
       This project was originally a prototype for a "Multiple Signatures" feature. It included a rich-text editor (Tiptap) with a custom Signature Node, a Signature Library, and a Settings page.
     </context>
     <recent_changes>
-      1. Implemented a multi-step "Create Voice Inbox" wizard with General and Voice settings.
-      2. Integrated dynamic sidebar rendering that automatically lists user-created voice inboxes.
-      3. Added custom tooltips and refined icon sequence in the mini sidebar.
-      4. Implemented the "Incoming Call" simulation UI (IncomingCallStrip).
-      5. Updated the primary application title to "Hiver".
+      1. Implemented a multi-step "Create Voice Inbox" wizard with United States as the default country.
+      2. Refined Voice Inbox rendering in the sidebar (removed hardcoded placeholders, added dynamic simulation triggers).
+      3. Implemented the "Incoming Call" and "Connected Call" states with Timer and Action buttons.
+      4. Added Admin management UI with inbox deletion and synced tooltip designs.
+      5. Standardized icon usage and ensured high-fidelity CSS transitions for all overlays.
     </recent_changes>
     <current_state>
       A clean, generic email/helpdesk client UI boilerplate. Ready to be used as a foundation for new feature prototypes within the Hiver Omni ecosystem.
