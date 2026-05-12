@@ -9,7 +9,7 @@ import sChevronDownIcon from '../assets/icons/s-chevron-down.svg';
 
 const CreateVoiceInboxWizard = ({ onBack, step, onStepChange, onSave }) => {
   const [inboxName, setInboxName] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState({ name: 'United Kingdom', flag: '🇬🇧' });
+  const [selectedCountry, setSelectedCountry] = useState({ name: 'United States', flag: '🇺🇸' });
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
