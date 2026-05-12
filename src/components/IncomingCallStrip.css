@@ -7,6 +7,21 @@
   right: 0;
   z-index: 100;
   pointer-events: none; /* Let clicks pass through padding to content behind if any, but the strip itself needs clicks */
+  animation: slideIn 300ms ease-out forwards;
+}
+
+.incoming-call-strip-container.exiting {
+  animation: slideOut 150ms ease-in forwards;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes slideOut {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
 }
 
 .incoming-call-strip {
@@ -17,7 +32,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 32px;
+  padding: 0 12px;
   width: 100%;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -55,17 +70,19 @@
 .call-info-badge {
   background-color: var(--slateTextTitle, #0f172a);
   border-radius: 40px;
-  height: 36px;
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 0 20px;
+  padding: 10px 20px;
 }
 
 .call-icon-animated {
   display: flex;
   align-items: center;
   justify-content: center;
+  line-height: 0;
+  height: 16px; /* Match icon size */
+  width: 16px;
 }
 
 .call-status, .call-timer {
@@ -109,4 +126,101 @@
 
 .btn-reject {
   background-color: var(--errorSurfaceDisabled, #eb5c5c);
+}
+
+.connected-pill {
+  background-color: var(--successBorderDark, #2dbb6d);
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 20px;
+}
+
+.connected-status, .connected-timer {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+}
+
+.connected-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  width: 300px;
+}
+
+.icon-btn-action {
+  width: 32px;
+  height: 32px;
+  background-color: var(--slateSurfaceWhite, white);
+  border: 1px solid var(--slateBorderLight, #e2e8f0);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.icon-btn-action:hover {
+  background-color: var(--slateSurfaceSubtle, #f8fafc);
+}
+
+.btn-end-call {
+  width: 32px;
+  height: 32px;
+  background-color: var(--errorSurfaceDisabled, #eb5c5c);
+  border: none;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-end-call:hover {
+  opacity: 0.9;
+}
+
+.action-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.call-action-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.call-action-item .tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 10px;
+  background-color: #334155;
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 400;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.1s, visibility 0.1s;
+  pointer-events: none;
+  z-index: 1000;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.call-action-item:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
 }

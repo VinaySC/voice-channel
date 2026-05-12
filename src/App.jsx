@@ -1048,7 +1048,7 @@ function App() {
                 </div>
                 {isCallIncoming && (
                   <IncomingCallStrip 
-                    onAccept={() => setIsCallIncoming(false)} 
+                    onAccept={() => {}} 
                     onReject={() => setIsCallIncoming(false)} 
                   />
                 )}
