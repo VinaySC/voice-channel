@@ -11,9 +11,9 @@ This document tracks the progress and roadmap for the Voice Channel prototype wi
 - [x] **1.3 Integration**: Ensure the newly created voice inbox appears in the Sidebar navigation.
 
 ## 📞 Phase 2: Core Experience (Simulated Call)
-- [ ] **2.1 Incoming Call Simulation**: Implement a UI trigger (e.g., a "Simulate Call" button) that triggers a call overlay/modal.
+- [x] **2.1 Incoming Call Simulation**: Implement a UI trigger (e.g., a "Simulate Call" button) that triggers a call overlay/modal.
 - [ ] **2.2 Active Call UI**: Create the UI for an ongoing call (Timer, Mute, End Call buttons, Caller Info).
-- [ ] **2.3 Call Pick-up Logic**: Allow the user to "Answer" the call and transition to the active state.
+- [x] **2.3 Call Pick-up Logic**: Allow the user to "Answer" the call and transition to the active state.
 
 ## 🤖 Phase 3: Post-Call Intelligence
 - [ ] **3.1 Transition State**: Show a skeletal loader immediately after a call ends to simulate AI processing.

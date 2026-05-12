@@ -36,6 +36,12 @@
     <component path="src/ProfileModal.jsx">
       A modal triggered from the MiniSidebar. Contains user availability toggles and logout. Navigation to `/settings` has been explicitly removed.
     </component>
+    <component path="src/components/CreateVoiceInboxWizard.jsx">
+      Multi-step wizard for creating voice inboxes. Managed through local state and props.
+    </component>
+    <component path="src/components/IncomingCallStrip.jsx">
+      A horizontal notification bar that appears at the bottom of the screen to simulate an incoming voice call.
+    </component>
   </core_components>
 
   <project_history>
@@ -43,10 +49,11 @@
       This project was originally a prototype for a "Multiple Signatures" feature. It included a rich-text editor (Tiptap) with a custom Signature Node, a Signature Library, and a Settings page.
     </context>
     <recent_changes>
-      1. ALL signature functionality, components, and states were systematically stripped to convert this into a clean UI boilerplate for future prototypes.
-      2. The Settings Page (`/settings`) was completely deleted.
-      3. The "Shipping", "Refund", and "IT Support" inboxes were removed from the sidebar.
-      4. The `ReplySection` (text editor) was removed from `ConversationDetail.jsx` making the detail view read-only.
+      1. Implemented a multi-step "Create Voice Inbox" wizard with General and Voice settings.
+      2. Integrated dynamic sidebar rendering that automatically lists user-created voice inboxes.
+      3. Added custom tooltips and refined icon sequence in the mini sidebar.
+      4. Implemented the "Incoming Call" simulation UI (IncomingCallStrip).
+      5. Updated the primary application title to "Hiver".
     </recent_changes>
     <current_state>
       A clean, generic email/helpdesk client UI boilerplate. Ready to be used as a foundation for new feature prototypes within the Hiver Omni ecosystem.
