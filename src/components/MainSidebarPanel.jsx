@@ -111,21 +111,30 @@ const MainSidebarPanel = ({ activeFilter, onFilterChange, voiceInboxes = [], onS
           {voiceMineCount > 0 && <span className="count">{voiceMineCount}</span>}
         </div>
 
-        <div className="nav-item">
+        <div 
+          className={`nav-item ${activeFilter.inbox === inboxName && activeFilter.type === 'All assigned' ? 'active' : ''}`}
+          onClick={() => onFilterChange({ inbox: inboxName, type: 'All assigned', isVoiceInbox: true })}
+        >
           <div className="nav-content">
             <img src={assignedToMeIcon} alt="" width="16" height="16" className="item-icon" />
             <span>All assigned</span>
           </div>
         </div>
 
-        <div className="nav-item">
+        <div 
+          className={`nav-item ${activeFilter.inbox === inboxName && activeFilter.type === 'Tags' ? 'active' : ''}`}
+          onClick={() => onFilterChange({ inbox: inboxName, type: 'Tags', isVoiceInbox: true })}
+        >
           <div className="nav-content">
             <img src={tagsIcon} alt="" width="16" height="16" className="item-icon" />
             <span>Tags</span>
           </div>
         </div>
 
-        <div className="nav-item">
+        <div 
+          className={`nav-item ${activeFilter.inbox === inboxName && activeFilter.type === 'Closed' ? 'active' : ''}`}
+          onClick={() => onFilterChange({ inbox: inboxName, type: 'Closed', isVoiceInbox: true })}
+        >
           <div className="nav-content">
             <img src={tickIcon} alt="" width="16" height="16" className="item-icon" />
             <span>Closed</span>
@@ -225,7 +234,8 @@ const MainSidebarPanel = ({ activeFilter, onFilterChange, voiceInboxes = [], onS
                     className={`nav-item accordion-trigger ${expandedInboxes[`voice-${index}`] !== false ? 'expanded' : ''}`}
                     onClick={() => toggleInbox(`voice-${index}`)}
                   >
-                    <div className="nav-content" onClick={() => {
+                    <div className="nav-content" onClick={(e) => {
+                      e.stopPropagation();
                       onSimulateCall(inbox.name);
                     }} title="Click to simulate call">
                       <img src={voiceInboxIcon} alt="" width="16" height="16" className="item-icon" />

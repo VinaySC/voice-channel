@@ -11,12 +11,13 @@ import customerNameIcon from '../assets/icons/customer-name.svg';
 import emailIcon from '../assets/icons/email-icon.svg';
 import phoneIcon from '../assets/icons/phone-icon.svg';
 import addIcon from '../assets/icons/add-icon.svg';
+import addContactIcon from '../assets/icons/add-contact.svg';
 import incomingCall14 from '../assets/icons/incoming-call-14.svg';
 import tabsMail from '../assets/icons/tabs-mail.svg';
 import tabsApps from '../assets/icons/tabs-apps.svg';
 import tabsClose from '../assets/icons/tabs-close.svg';
 
-const RightPanel = ({ isFullView = false, inboxName = 'Call Support' }) => {
+const RightPanel = ({ isFullView = false, inboxName = 'Call Support', contactName = 'Unknown' }) => {
   const [isCustomerDetailsOpen, setIsCustomerDetailsOpen] = useState(true);
   const [isPrevConvosOpen, setIsPrevConvosOpen] = useState(true);
   const [activeTab, setActiveTab] = useState('All Activities');
@@ -118,45 +119,47 @@ const RightPanel = ({ isFullView = false, inboxName = 'Call Support' }) => {
                   <img src={customerNameIcon} alt="" width="14" height="14" />
                   <span>Name</span>
                 </div>
-                <div className="property-value-wrapper link-style relative-container" ref={dropdownRef}>
-                  <div className="add-contact-trigger" onClick={() => setIsContactDropdownOpen(!isContactDropdownOpen)}>
-                    <img src={addIcon} alt="" width="16" height="16" />
-                    <span className="property-value subtle">Add to contacts</span>
-                  </div>
-                  {isContactDropdownOpen && (
-                    <div className="contact-dropdown">
-                      <div className="contact-search-box">
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path fillRule="evenodd" clipRule="evenodd" d="M9.625 5.83333C9.625 7.92741 7.92741 9.625 5.83333 9.625C3.73925 9.625 2.04167 7.92741 2.04167 5.83333C2.04167 3.73925 3.73925 2.04167 5.83333 2.04167C7.92741 2.04167 9.625 3.73925 9.625 5.83333ZM8.84715 10.0846C7.9944 10.8252 6.95408 11.2583 5.83333 11.2583C2.83379 11.2583 0.408333 8.83288 0.408333 5.83333C0.408333 2.83379 2.83379 0.408333 5.83333 0.408333C8.83288 0.408333 11.2583 2.83379 11.2583 5.83333C11.2583 6.95408 10.8252 7.9944 10.0846 8.84715L13.1118 11.8744C13.4308 12.1933 13.4308 12.7104 13.1118 13.0293C12.7929 13.3483 12.2758 13.3483 11.9568 13.0293L8.84715 10.0846Z" fill="#94A3B8"/>
-                        </svg>
-                        <input 
-                          type="text" 
-                          placeholder="Search" 
-                          value={contactSearchTerm}
-                          onChange={(e) => setContactSearchTerm(e.target.value)}
-                        />
-                      </div>
-                      <div className="contact-list-container">
-                        <div className="contact-list-item">
-                          <div className="contact-avatar create-new">
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path fillRule="evenodd" clipRule="evenodd" d="M7 11.6667C9.57733 11.6667 11.6667 9.57733 11.6667 7C11.6667 4.42267 9.57733 2.33333 7 2.33333C4.42267 2.33333 2.33333 4.42267 2.33333 7C2.33333 9.57733 4.42267 11.6667 7 11.6667ZM7 12.8333C10.2217 12.8333 12.8333 10.2217 12.8333 7C12.8333 3.77834 10.2217 1.16667 7 1.16667C3.77834 1.16667 1.16667 3.77834 1.16667 7C1.16667 10.2217 3.77834 12.8333 7 12.8333ZM6.41667 4.08333C6.41667 3.76117 6.67784 3.5 7 3.5C7.32216 3.5 7.58333 3.76117 7.58333 4.08333V6.41667H9.91667C10.2388 6.41667 10.5 6.67784 10.5 7C10.5 7.32216 10.2388 7.58333 9.91667 7.58333H7.58333V9.91667C7.58333 10.2388 7.32216 10.5 7 10.5C6.67784 10.5 6.41667 10.2388 6.41667 9.91667V7.58333H4.08333C3.76117 7.58333 3.5 7.32216 3.5 7C3.5 6.67784 3.76117 6.41667 4.08333 6.41667H6.41667V4.08333Z" fill="#64758B"/>
-                            </svg>
-                          </div>
-                          <span>Create a new contact</span>
-                        </div>
-                        <div className="contact-list-item">
-                          <div className="contact-avatar a-avatar">A</div>
-                          <span>Albert Flores</span>
-                        </div>
-                        <div className="contact-list-item">
-                          <div className="contact-avatar d-avatar">D</div>
-                          <span>Devon Lane</span>
-                        </div>
-                      </div>
+                {contactName === 'Unknown' ? (
+                  <div className="property-value-wrapper link-style relative-container" ref={dropdownRef}>
+                    <div className={`add-contact-trigger ${isContactDropdownOpen ? 'active' : ''}`} onClick={() => setIsContactDropdownOpen(!isContactDropdownOpen)}>
+                      <img src={addIcon} alt="" width="16" height="16" />
+                      <span className="property-value subtle">Add to contacts</span>
                     </div>
-                  )}
-                </div>
+                    {isContactDropdownOpen && (
+                      <div className="contact-dropdown">
+                        <div className="contact-search-box">
+                          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fillRule="evenodd" clipRule="evenodd" d="M9.625 5.83333C9.625 7.92741 7.92741 9.625 5.83333 9.625C3.73925 9.625 2.04167 7.92741 2.04167 5.83333C2.04167 3.73925 3.73925 2.04167 5.83333 2.04167C7.92741 2.04167 9.625 3.73925 9.625 5.83333ZM8.84715 10.0846C7.9944 10.8252 6.95408 11.2583 5.83333 11.2583C2.83379 11.2583 0.408333 8.83288 0.408333 5.83333C0.408333 2.83379 2.83379 0.408333 5.83333 0.408333C8.83288 0.408333 11.2583 2.83379 11.2583 5.83333C11.2583 6.95408 10.8252 7.9944 10.0846 8.84715L13.1118 11.8744C13.4308 12.1933 13.4308 12.7104 13.1118 13.0293C12.7929 13.3483 12.2758 13.3483 11.9568 13.0293L8.84715 10.0846Z" fill="#94A3B8"/>
+                          </svg>
+                          <input 
+                            type="text" 
+                            placeholder="Search" 
+                            value={contactSearchTerm}
+                            onChange={(e) => setContactSearchTerm(e.target.value)}
+                          />
+                        </div>
+                        <div className="contact-list-container">
+                          <div className="contact-list-item">
+                            <div className="contact-avatar create-new">
+                              <img src={addContactIcon} alt="" width="14" height="14" />
+                            </div>
+                            <span>Create a new contact</span>
+                          </div>
+                          <div className="contact-list-item">
+                            <div className="contact-avatar a-avatar">A</div>
+                            <span>Albert Flores</span>
+                          </div>
+                          <div className="contact-list-item">
+                            <div className="contact-avatar d-avatar">D</div>
+                            <span>Devon Lane</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="property-value">{contactName}</div>
+                )}
               </div>
               
               <div className="property-item">
@@ -232,7 +235,7 @@ const RightPanel = ({ isFullView = false, inboxName = 'Call Support' }) => {
                 <img src={incomingCall14} alt="" width="14" height="14" />
               </div>
               <div className="event-content">
-                <p className="event-msg">Incoming call received in <strong>Call Support</strong></p>
+                <p className="event-msg">Incoming call received in {inboxName}</p>
                 <span className="event-time">01:02 PM</span>
               </div>
             </div>

@@ -1,0 +1,228 @@
+.customers-view-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--slateSurfaceWhite, white);
+  overflow: hidden;
+}
+
+/* Header */
+.customers-header {
+  height: 56px;
+  border-bottom: 1px solid var(--slateBorderLight, #e2e8f0);
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: white;
+  flex-shrink: 0;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-left h1 {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--slateTextTitle, #0f172a);
+  margin: 0;
+}
+
+.header-search {
+  width: 300px;
+  height: 32px;
+  background-color: white;
+  border: 1.2px solid var(--slateBorderLight, #e2e8f0);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px 0 12px;
+  gap: 8px;
+}
+
+.search-icon {
+  opacity: 0.5;
+}
+
+.header-search input {
+  border: none;
+  background: none;
+  outline: none;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  color: var(--slateTextBody, #334155);
+  width: 100%;
+}
+
+.header-search input::placeholder {
+  color: var(--slateTextSubtle, #64758b);
+}
+
+/* Content Area */
+.customers-content {
+  padding: 8px 48px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow: auto;
+}
+
+/* Tabs */
+.customers-tabs {
+  height: 48px;
+  border-bottom: 1px solid var(--slateBorderMild, #edf1f6);
+  display: flex;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.tab-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.tab-item span {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--slateTextSubtle, #64758b);
+}
+
+.tab-item img {
+  opacity: 0.6;
+}
+
+.tab-item.active {
+  border-bottom: 1.5px solid var(--slateTextBody, #334155);
+}
+
+.tab-item.active span {
+  color: var(--slateTextBody, #334155);
+}
+
+.tab-item.active img {
+  opacity: 1;
+}
+
+/* Table */
+.customers-table-wrapper {
+  border: 1px solid var(--slateBorderLight, #e2e8f0);
+  border-radius: 12px;
+  background-color: white;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  width: 100%;
+}
+
+.customers-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.customers-table thead th {
+  background-color: #f1f5f9; /* slateSurfaceSubtle100-hover equivalent */
+  border-bottom: 1px solid var(--slateBorderLight, #e2e8f0);
+  padding: 12px 24px;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--slateTextBody, #334155);
+  height: 44px;
+}
+
+.customers-table tbody td {
+  padding: 11px 24px;
+  border-bottom: 1px solid var(--slateBorderMild, #edf1f6);
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  color: var(--slateTextBody, #334155);
+  height: 42px;
+  vertical-align: middle;
+}
+
+.customers-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.customers-table tbody tr:hover td {
+  background-color: var(--slateSurfaceSubtle, #f8fafc);
+}
+
+/* Specific Cells */
+.customer-name-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.customer-avatar {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 500;
+  color: white;
+  flex-shrink: 0;
+}
+
+.email-cell a {
+  color: var(--primaryTextLabel, #0c3e9d);
+  text-decoration: none;
+}
+
+.email-cell a:hover {
+  text-decoration: underline;
+}
+
+.name-col { width: 30%; }
+.email-col { width: 30%; }
+.phone-col { width: 20%; }
+.account-col { width: 20%; }
+
+.phone-number-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.phone-text {
+  width: 140px;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.table-call-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+}
+
+.customers-table tbody tr:hover .table-call-btn {
+  opacity: 1;
+  visibility: visible;
+}
+
+

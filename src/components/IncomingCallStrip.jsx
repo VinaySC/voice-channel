@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './IncomingCallStrip.css';
-import { PhoneIncomingIcon } from "@animateicons/react/lucide";
+import { PhoneIncomingIcon, PhoneIcon } from "@animateicons/react/lucide";
 import callAcceptIcon from '../assets/icons/call-accept.svg';
 import callRejectIcon from '../assets/icons/call-reject.svg';
 import genericAvatarIcon from '../assets/icons/generic-avatar.svg';
@@ -12,8 +12,9 @@ import endCallIcon from '../assets/icons/end-call.svg';
 import fullViewIcon from '../assets/icons/full-view.svg';
 import phoneIncomingIcon from '../assets/icons/phone-incoming.svg';
 
-const IncomingCallStrip = ({ isAccepted, connectedSeconds, onAccept, onReject }) => {
+const IncomingCallStrip = ({ activeFilter, isAccepted, isOutgoing, contactName, contactNumber, connectedSeconds, onAccept, onReject, onOpenFullView }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [seconds, setSeconds] = useState(1);
   const [isExiting, setIsExiting] = useState(false);
   const [shouldAnimate, setShouldAnimate] = useState(!isAccepted);
@@ -73,7 +74,11 @@ const IncomingCallStrip = ({ isAccepted, connectedSeconds, onAccept, onReject })
           <div className="avatar-circle">
             <img src={genericAvatarIcon} alt="" width="28" height="28" />
           </div>
-          <span className="profile-name">Unknown (+91 98765 43210)</span>
+          <span className="profile-name">
+            {isOutgoing 
+              ? `${contactName || 'Unknown'} ${contactNumber ? `(${contactNumber})` : ''}` 
+              : 'Unknown (+91 98765 43210)'}
+          </span>
         </div>
         
         <div className="call-info-wrapper">
@@ -88,13 +93,21 @@ const IncomingCallStrip = ({ isAccepted, connectedSeconds, onAccept, onReject })
                 className="call-info-badge"
               >
                 <div className="call-icon-animated">
-                  <PhoneIncomingIcon 
-                    ref={iconRef}
-                    size={16} 
-                    color="#cbd5e1" 
-                  />
+                  {isOutgoing ? (
+                    <PhoneIcon 
+                      ref={iconRef}
+                      size={16} 
+                      color="#cbd5e1" 
+                    />
+                  ) : (
+                    <PhoneIncomingIcon 
+                      ref={iconRef}
+                      size={16} 
+                      color="#cbd5e1" 
+                    />
+                  )}
                 </div>
-                <span className="call-status">Incoming call...</span>
+                <span className="call-status">{isOutgoing ? 'Outgoing call...' : 'Incoming call...'}</span>
                 <span className="call-timer">Waiting for {formatTime(seconds)}</span>
               </motion.div>
             ) : (
@@ -109,10 +122,17 @@ const IncomingCallStrip = ({ isAccepted, connectedSeconds, onAccept, onReject })
                 <img src={phoneIncomingIcon} alt="" width="16" height="16" />
                 <span className="connected-status">Connected</span>
                 <span className="connected-timer">{formatTime(connectedSeconds)}</span>
-                <div className="call-action-item" onClick={() => navigate('/active-call')}>
-                  <img src={fullViewIcon} alt="" width="16" height="16" style={{ cursor: 'pointer' }} />
-                  <span className="tooltip">Open full view</span>
-                </div>
+                {(location.pathname !== '/active-call' || activeFilter?.type !== 'Mine') && (
+                  <div className="call-action-item">
+                    <button className="icon-btn-action" onClick={(e) => {
+                      e.stopPropagation();
+                      if (onOpenFullView) onOpenFullView();
+                    }}>
+                      <img src={fullViewIcon} alt="" width="16" height="16" />
+                    </button>
+                    <span className="tooltip">Open full view</span>
+                  </div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
@@ -129,13 +149,15 @@ const IncomingCallStrip = ({ isAccepted, connectedSeconds, onAccept, onReject })
                 transition={{ duration: 0.15 }}
                 className="action-group"
               >
-                <button className="btn-accept" onClick={handleAccept}>
-                  <img src={callAcceptIcon} alt="" width="14" height="14" />
-                  <span>Accept</span>
-                </button>
-                <button className="btn-reject" onClick={handleReject}>
+                {!isOutgoing && (
+                  <button className="btn-accept" onClick={handleAccept}>
+                    <img src={callAcceptIcon} alt="" width="14" height="14" />
+                    <span>Accept</span>
+                  </button>
+                )}
+                <button className={isOutgoing ? 'btn-cancel' : 'btn-reject'} onClick={handleReject}>
                   <img src={callRejectIcon} alt="" width="14" height="14" />
-                  <span>Reject</span>
+                  <span>{isOutgoing ? 'Cancel' : 'Reject'}</span>
                 </button>
               </motion.div>
             ) : (

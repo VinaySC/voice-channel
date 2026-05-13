@@ -9,11 +9,12 @@ import ConversationList from './components/ConversationList';
 import ConversationDetail from './components/ConversationDetail';
 import RightPanel from './components/RightPanel';
 import AdminPage from './pages/AdminPage';
+import CustomersView from './pages/CustomersView';
 import ActiveCallView from './pages/ActiveCallView';
 import IncomingCallStrip from './components/IncomingCallStrip';
 import TranscriptToast from './components/TranscriptToast';
 import incomingCallAudio from './assets/audio/incoming-call.mp3';
-import callEndAudio from './assets/audio/call-end.wav';
+import callEndAudio from './assets/audio/call-end.mp3';
 import { useState } from 'react';
 
 const conversationsData = [
@@ -1003,6 +1004,10 @@ function App() {
   const [connectedSeconds, setConnectedSeconds] = useState(0);
   const [isCallEndedGlobally, setIsCallEndedGlobally] = useState(false);
   const [isTranscriptReadyGlobally, setIsTranscriptReadyGlobally] = useState(false);
+  const [callList, setCallList] = useState([]);
+  const [isOutgoingCall, setIsOutgoingCall] = useState(false);
+  const [outgoingContact, setOutgoingContact] = useState({ name: '', number: '' });
+  const [selectedCallId, setSelectedCallId] = useState(null);
 
   const filteredConversations = conversationsData.filter(c => 
     c.inbox === activeFilter.inbox && c.type === activeFilter.type
@@ -1031,36 +1036,79 @@ function App() {
   const [signatures, setSignatures] = useState([]);
   const [defaultSignatureId, setDefaultSignatureId] = useState(null);
   const [voiceInboxes, setVoiceInboxes] = useState([]);
-  const [activeInboxName, setActiveInboxName] = useState('Call Support');
+  const [activeInboxName, setActiveInboxName] = useState('Unknown');
   const [isToastVisible, setIsToastVisible] = useState(false);
   const [isToastExiting, setIsToastExiting] = useState(false);
+  const handleAcceptCall = () => {
+    setIsCallAccepted(true);
+    setIsCallEndedGlobally(false);
+    setIsTranscriptReadyGlobally(false);
+    
+    const newId = `unknown-${Date.now()}`;
+    setCallList(prev => {
+      const newCall = { id: newId, name: activeInboxName, date: 'Mar 12', status: 'active' };
+      if (prev.length === 0) {
+        return [
+          newCall,
+          { id: 'dakota', name: 'Dakota Wilder', date: 'Mar 12', status: 'finished' }
+        ];
+      } else {
+        return [newCall, ...prev];
+      }
+    });
+  };
+
+  const handleOutgoingCall = (name, number) => {
+    if (isCallIncoming || isCallAccepted || isOutgoingCall) return;
+
+    // Simulate outgoing call
+    setIsOutgoingCall(true);
+    setOutgoingContact({ name, number });
+    setConnectedSeconds(0);
+    // You might want to play a ringing sound here
+  };
 
   const handleEndCall = () => {
     new Audio(callEndAudio).play().catch(e => console.log('Audio play blocked or failed:', e));
+    
+    const wasAccepted = isCallAccepted;
     setIsCallIncoming(false);
     setIsCallAccepted(false);
-    setIsCallEndedGlobally(true);
-    setIsTranscriptReadyGlobally(false);
+    setIsOutgoingCall(false);
 
-    // After 6 seconds, the transcript is ready
-    setTimeout(() => {
-      setIsTranscriptReadyGlobally(true);
+    if (wasAccepted) {
+      setIsCallEndedGlobally(true);
+      setIsTranscriptReadyGlobally(false);
 
-      // If user is NOT on /active-call, show the toast
-      if (window.location.pathname !== '/active-call') {
-        setIsToastVisible(true);
-        setIsToastExiting(false);
+      // After 6 seconds, the transcript is ready
+      setTimeout(() => {
+        setIsTranscriptReadyGlobally(true);
 
-        // Auto-hide the toast after another 6 seconds
-        setTimeout(() => {
-          setIsToastExiting(true);
+        // Mark the call as finished in the list
+        setCallList(prev => {
+          const newList = [...prev];
+          if (newList.length > 0 && newList[0].status === 'active') {
+            newList[0] = { ...newList[0], status: 'finished' };
+          }
+          return newList;
+        });
+
+        // If user is NOT on /active-call, show the toast
+        if (window.location.pathname !== '/active-call') {
+          setIsToastVisible(true);
+          setIsToastExiting(false);
+
+          // Auto-hide the toast after another 6 seconds
           setTimeout(() => {
-            setIsToastVisible(false);
-            setIsToastExiting(false);
-          }, 500);
-        }, 6000);
-      }
-    }, 6000);
+            setIsToastExiting(true);
+            setTimeout(() => {
+              setIsToastVisible(false);
+              setIsToastExiting(false);
+            }, 500);
+          }, 6000);
+        }
+      }, 6000);
+    }
   };
 
   const handleCloseToast = () => {
@@ -1092,14 +1140,17 @@ function App() {
                   }
                 }}
                 voiceInboxes={voiceInboxes}
-                onSimulateCall={(name) => {
+                onSimulateCall={() => {
+                  if (isCallIncoming || isCallAccepted) return;
+
                   new Audio(incomingCallAudio).play().catch(e => console.log('Audio play blocked or failed:', e));
+                  setIsOutgoingCall(false);
                   setIsCallIncoming(true);
                   setIsCallAccepted(false);
-                  setIsCallEndedGlobally(false);
-                  setIsTranscriptReadyGlobally(false);
                   setConnectedSeconds(0);
-                  setActiveInboxName(name || 'Call Support');
+                  const unknownCount = callList.filter(c => c.name === 'Unknown' || c.name.startsWith('Unknown (')).length;
+                  const nextName = unknownCount > 0 ? `Unknown (${unknownCount})` : 'Unknown';
+                  setActiveInboxName(nextName);
                 }}
                 voiceMineCount={isCallAccepted ? 1 : 0}
               />
@@ -1129,10 +1180,13 @@ function App() {
               setVoiceInboxes={setVoiceInboxes} 
             />
           } />
+          <Route path="/customers" element={
+            <CustomersView onCallClick={handleOutgoingCall} />
+          } />
           <Route path="/active-call" element={
             <>
               <MainSidebarPanel 
-                activeFilter={{ inbox: activeInboxName, type: 'Mine', isVoiceInbox: true }} 
+                activeFilter={activeFilter} 
                 onFilterChange={(filter) => {
                   setActiveFilter(filter);
                   if (!filter.isVoiceInbox) {
@@ -1140,7 +1194,18 @@ function App() {
                   }
                 }}
                 voiceInboxes={voiceInboxes}
-                onSimulateCall={() => {}} 
+                onSimulateCall={() => {
+                  if (isCallIncoming || isCallAccepted) return;
+
+                  new Audio(incomingCallAudio).play().catch(e => console.log('Audio play blocked or failed:', e));
+                  setIsOutgoingCall(false);
+                  setIsCallIncoming(true);
+                  setIsCallAccepted(false);
+                  setConnectedSeconds(0);
+                  const unknownCount = callList.filter(c => c.name === 'Unknown' || c.name.startsWith('Unknown (')).length;
+                  const nextName = unknownCount > 0 ? `Unknown (${unknownCount})` : 'Unknown';
+                  setActiveInboxName(nextName);
+                }} 
                 voiceMineCount={isCallAccepted ? 1 : 0}
               />
               <ActiveCallView 
@@ -1149,6 +1214,11 @@ function App() {
                 onEndCall={handleEndCall}
                 isCallEndedGlobally={isCallEndedGlobally}
                 isTranscriptReadyGlobally={isTranscriptReadyGlobally}
+                hasCallHistory={callList.length > 0}
+                activeFilter={activeFilter}
+                callList={callList}
+                selectedCallId={selectedCallId}
+                setSelectedCallId={setSelectedCallId}
               />
             </>
           } />
@@ -1162,16 +1232,25 @@ function App() {
           }}
         />
       )}
-      {isCallIncoming && (
+      {(isCallIncoming || isOutgoingCall) && (
         <IncomingCallStrip 
+          activeFilter={activeFilter}
           isAccepted={isCallAccepted}
+          isOutgoing={isOutgoingCall}
+          contactName={isOutgoingCall ? outgoingContact.name : activeInboxName}
+          contactNumber={isOutgoingCall ? outgoingContact.number : ''}
           connectedSeconds={connectedSeconds}
-          onAccept={() => setIsCallAccepted(true)} 
+          onAccept={handleAcceptCall} 
           onReject={() => {
-            new Audio(callEndAudio).play().catch(e => console.log('Audio play blocked or failed:', e));
-            setIsCallIncoming(false);
-            setIsCallAccepted(false);
+            handleEndCall();
           }} 
+          onOpenFullView={() => {
+            setActiveFilter({ inbox: activeInboxName, type: 'Mine', isVoiceInbox: true });
+            if (callList.length > 0 && callList[0].status === 'active') {
+              setSelectedCallId(callList[0].id);
+            }
+            navigate('/active-call');
+          }}
         />
       )}
       {isToastVisible && (

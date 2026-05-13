@@ -105,7 +105,7 @@
   width: 300px;
 }
 
-.btn-accept, .btn-reject {
+.btn-accept, .btn-reject, .btn-cancel {
   height: 32px;
   display: flex;
   align-items: center;
@@ -121,7 +121,7 @@
   transition: opacity 0.2s;
 }
 
-.btn-accept:hover, .btn-reject:hover {
+.btn-accept:hover, .btn-reject:hover, .btn-cancel:hover {
   opacity: 0.9;
 }
 
@@ -129,7 +129,7 @@
   background-color: var(--successTextSubtle, #2dbb6d);
 }
 
-.btn-reject {
+.btn-reject, .btn-cancel {
   background-color: var(--errorSurfaceDisabled, #eb5c5c);
 }
 
@@ -158,10 +158,10 @@
 }
 
 .icon-btn-action {
-  width: 32px;
-  height: 32px;
-  background-color: var(--slateSurfaceWhite, white);
-  border: 1px solid var(--slateBorderLight, #e2e8f0);
+  width: 16px;
+  height: 16px;
+  background-color: transparent;
+  border: none;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -170,9 +170,7 @@
   transition: background-color 0.2s;
 }
 
-.icon-btn-action:hover {
-  background-color: var(--slateSurfaceSubtle, #f8fafc);
-}
+/* Removed hover state as requested */
 
 .btn-end-call {
   width: 32px;
@@ -202,6 +200,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
 }
 
 .call-action-item .tooltip {
